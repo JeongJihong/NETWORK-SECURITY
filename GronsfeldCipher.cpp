@@ -34,7 +34,7 @@ int main()
 			cout << "Enter the cipher text: ";
 			gets_s(str, sizeof(str));
 			cout << "Enter the key: ";
-			cin >> key;
+			gets_s(key, sizeof(key));
 
 			str_len = strlen(str);
 			key_len = strlen(key);
