@@ -53,23 +53,26 @@ void encryption(char* str, char* key, int str_len, int key_len)
 {
 	for (int i = 0; i < str_len; ++i) {
 		int j = i % key_len;
+
 		if (str[i] >= 'A' && str[i] <= 'Z') {
 			str[i] -= 'A';
-			key[j] -= '0';
-			while (str[i] + key[j] < 0) {
+			key[j] -= 'A';
+			if (str[i] + key[j] < 0) {
 				str[i] += 26;
 			}
 			str[i] += key[j] % 26;
 			str[i] += 'A';
+			key[j] += 'A';
 		}
 		else if (str[i] >= 'a' && str[i] <= 'z') {
 			str[i] -= 'a';
-			key[j] -= '0';
-			while (str[i] + key[j] < 0) {
+			key[j] -= 'a';
+			if (str[i] + key[j] < 0) {
 				str[i] += 26;
 			}
 			str[i] += key[j] % 26;
 			str[i] += 'a';
+			key[j] += 'a';
 		}
 		else;
 	}
@@ -82,21 +85,23 @@ void decryption(char* str, char* key, int str_len, int key_len)
 		int j = i % key_len;
 		if (str[i] >= 'A' && str[i] <= 'Z') {
 			str[i] -= 'A';
-			key[j] -= '0';
+			key[j] -= 'A';
 			while (str[i] + key[j] < 0) {
 				str[i] += 26;
 			}
 			str[i] += key[j] % 26;
 			str[i] += 'A';
+			key[j] += 'A';
 		}
 		else if (str[i] >= 'a' && str[i] <= 'z') {
 			str[i] -= 'a';
-			key[j] -= '0';
+			key[j] -= 'a';
 			while (str[i] + key[j] < 0) {
 				str[i] += 26;
 			}
 			str[i] += key[j] % 26;
 			str[i] += 'a';
+			key[j] += 'a';
 		}
 		else;
 	}
