@@ -1,15 +1,17 @@
 #include <iostream>
+#define BLOCK_SIZE 4
 
 using namespace std;
 
-void encryption(char*, char*, int, int);
-void decryption(char*, char*, int, int);
+void encryption(char*, int*, int, int);
+void decryption(char*, int*, int, int);
 
 int main()
 {
-	char str[100] = { 0, }, key[100] = { 0, };
-	int str_len = 0, key_len = 0;
+	char str[100];
+	int key[100] = { 0, }, str_len = 0, key_len = BLOCK_SIZE;
 	int mode = 0;
+	strncpy(str, "\0", 100);
 
 	while (1) {
 		cout << "select mode  1. encryption  2.decryption  3.quit" << endl;
@@ -21,10 +23,10 @@ int main()
 			cout << "Enter the plain text: ";
 			gets_s(str, sizeof(str));
 			cout << "Enter the key: ";
-			gets_s(key, sizeof(key));
+			for (int i = 0; i < BLOCK_SIZE; ++i)
+				cin >> key[i];
 
 			str_len = strlen(str);
-			key_len = strlen(key);
 
 			encryption(str, key, str_len, key_len);
 			break;
@@ -33,10 +35,10 @@ int main()
 			cout << "Enter the cipher text: ";
 			gets_s(str, sizeof(str));
 			cout << "Enter the key: ";
-			gets_s(key, sizeof(key));
+			for (int i = 0; i < BLOCK_SIZE; ++i)
+				cin >> key[i];
 
 			str_len = strlen(str);
-			key_len = strlen(key);
 
 			decryption(str, key, str_len, key_len);
 			break;
@@ -49,59 +51,51 @@ int main()
 	return 0;
 }
 
-void encryption(char* str, char* key, int str_len, int key_len)
+void encryption(char* str, int* key, int str_len, int key_len)
 {
 	for (int i = 0; i < str_len; ++i) {
 		int j = i % key_len;
 
 		if (str[i] >= 'A' && str[i] <= 'Z') {
 			str[i] -= 'A';
-			key[j] -= '0';
 			if (str[i] + key[j] < 0) {
 				str[i] += 26;
 			}
 			str[i] += key[j] % 26;
 			str[i] += 'A';
-			key[j] += '0';
 		}
 		else if (str[i] >= 'a' && str[i] <= 'z') {
 			str[i] -= 'a';
-			key[j] -= '0';
 			if (str[i] + key[j] < 0) {
 				str[i] += 26;
 			}
 			str[i] += key[j] % 26;
 			str[i] += 'a';
-			key[j] += '0';
 		}
 		else;
 	}
 	cout << "ciphertext: " << str << endl;
 }
 
-void decryption(char* str, char* key, int str_len, int key_len)
+void decryption(char* str, int* key, int str_len, int key_len)
 {
 	for (int i = 0; i < str_len; ++i) {
 		int j = i % key_len;
 		if (str[i] >= 'A' && str[i] <= 'Z') {
 			str[i] -= 'A';
-			key[j] -= '0';
 			while (str[i] + key[j] < 0) {
 				str[i] += 26;
 			}
 			str[i] += key[j] % 26;
 			str[i] += 'A';
-			key[j] += '0';
 		}
 		else if (str[i] >= 'a' && str[i] <= 'z') {
 			str[i] -= 'a';
-			key[j] -= '0';
-			while (str[i] + key[j] < 0) {
+			while (str[i] - key[j] < 0) {
 				str[i] += 26;
 			}
-			str[i] += key[j] % 26;
+			str[i] -= key[j] % 26;
 			str[i] += 'a';
-			key[j] += '0';
 		}
 		else;
 	}
